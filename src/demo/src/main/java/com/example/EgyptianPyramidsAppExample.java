@@ -139,6 +139,9 @@ public class EgyptianPyramidsAppExample {
       case '1':
         printAllPharaoh();
         break;
+      case '2':
+        getPharaoh(scan);
+        break;
       case 'q':
         System.out.println("Thank you for using Nassef's Egyptian Pyramid App!");
         break;
@@ -175,4 +178,30 @@ public class EgyptianPyramidsAppExample {
     printMenuCommand('q', "Quit");
     printMenuLine();
   }
-}
+  
+  private void getPharaoh(Scanner scan){
+      System.out.println("Please input pharaoh ID");
+      String pharaohID = scan.nextLine();
+      if(!checkInt(pharaohID) || (Integer.parseInt(pharaohID) < 0 || Integer.parseInt(pharaohID)> pharaohArray.length)){
+        System.out.println("Please input valid pharaoh ID");
+        return;
+      }
+      pharaohArray[Integer.parseInt(pharaohID)].print();
+    }
+  
+  private boolean checkInt(String input){
+       try{ 
+            Integer.parseInt(input); 
+       }catch(NumberFormatException e){ 
+           return false; 
+       }catch(NullPointerException e){
+      return false;
+  }
+
+  return true;
+  }
+
+  }
+
+
+
