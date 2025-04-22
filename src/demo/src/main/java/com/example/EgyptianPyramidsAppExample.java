@@ -11,6 +11,8 @@ public class EgyptianPyramidsAppExample {
   protected Pharaoh[] pharaohArray;
   protected Pyramid[] pyramidArray;
 
+  HashMap<String, String[]> contributors = new HashMap<String, String[]>();
+
   public static void main(String[] args) {
     // create and start the app
     EgyptianPyramidsAppExample app = new EgyptianPyramidsAppExample();
@@ -73,11 +75,14 @@ public class EgyptianPyramidsAppExample {
       // add a new pharoah to array
       Pharaoh p = new Pharaoh(id, name, begin, end, contribution, hieroglyphic);
       pharaohArray[i] = p;
+      
+      String[] information = {name , Integer.toString(contribution)}; 
+      contributors.put(hieroglyphic, information);
     }
   }
 
-    // initialize the pyramid array
-    private void initializePyramid(JSONArray pyramidJSONArray) {
+  // initialize the pyramid array
+  private void initializePyramid(JSONArray pyramidJSONArray) {
       // create array and hash map
       pyramidArray = new Pyramid[pyramidJSONArray.size()];
   
@@ -95,7 +100,6 @@ public class EgyptianPyramidsAppExample {
           String c = contributorsJSONArray.get(j).toString();
           contributors[j] = c;
         }
-  
         // add a new pyramid to array
         Pyramid p = new Pyramid(id, name, contributors);
         pyramidArray[i] = p;
@@ -131,6 +135,22 @@ public class EgyptianPyramidsAppExample {
       printMenuLine();
     }
   }
+  
+  private void printAllPyramids(){
+    for (int i = 0; i < pyramidArray.length; i++) {
+      printMenuLine();
+      System.out.printf("Pyramid Name %s\n", pyramidArray[i].name);
+      System.out.printf("\tid: %d\n", pyramidArray[i].id);
+      int sum = 0;
+      for(int j = 0; j < pyramidArray[i].contributors.length; j++){
+          System.out.printf("\tContributor %s %s ", j + ": ", contributors.get(pyramidArray[i].contributors[j])[0]);
+          System.out.printf("%s gold coins\n", contributors.get(pyramidArray[i].contributors[j])[1]);
+          sum = sum + Integer.parseInt(contributors.get(pyramidArray[i].contributors[j])[1]);
+      }
+      System.out.printf("\tTotal Contribution: %d gold coins\n", sum);
+      printMenuLine();
+    }
+  }
 
   private Boolean executeCommand(Scanner scan, Character command) {
     Boolean success = true;
@@ -141,6 +161,9 @@ public class EgyptianPyramidsAppExample {
         break;
       case '2':
         getPharaoh(scan);
+        break;
+      case '3':
+        printAllPyramids();
         break;
       case 'q':
         System.out.println("Thank you for using Nassef's Egyptian Pyramid App!");
