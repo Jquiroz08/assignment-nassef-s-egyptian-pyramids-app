@@ -12,6 +12,7 @@ public class EgyptianPyramidsAppExample {
   protected Pyramid[] pyramidArray;
 
   HashMap<String, String[]> contributors = new HashMap<String, String[]>();
+  Set<Integer> listOfPyramids = new HashSet<>();
 
   public static void main(String[] args) {
     // create and start the app
@@ -136,20 +137,26 @@ public class EgyptianPyramidsAppExample {
     }
   }
   
-  private void printAllPyramids(){
-    for (int i = 0; i < pyramidArray.length; i++) {
+  private void printAllPyramids(int index, int length){
+    while(length>0){
       printMenuLine();
-      System.out.printf("Pyramid Name %s\n", pyramidArray[i].name);
-      System.out.printf("\tid: %d\n", pyramidArray[i].id);
+      System.out.printf("Pyramid Name %s\n", pyramidArray[index].name);
+      System.out.printf("\tid: %d\n", pyramidArray[index].id);
       int sum = 0;
-      for(int j = 0; j < pyramidArray[i].contributors.length; j++){
-          System.out.printf("\tContributor %s %s ", j + ": ", contributors.get(pyramidArray[i].contributors[j])[0]);
-          System.out.printf("%s gold coins\n", contributors.get(pyramidArray[i].contributors[j])[1]);
-          sum = sum + Integer.parseInt(contributors.get(pyramidArray[i].contributors[j])[1]);
+      for(int j = 0; j < pyramidArray[index].contributors.length; j++){
+          System.out.printf("\tContributor %s %s ", j + ": ", contributors.get(pyramidArray[index].contributors[j])[0]);
+          System.out.printf("%s gold coins\n", contributors.get(pyramidArray[index].contributors[j])[1]);
+          sum = sum + Integer.parseInt(contributors.get(pyramidArray[index].contributors[j])[1]);
       }
       System.out.printf("\tTotal Contribution: %d gold coins\n", sum);
       printMenuLine();
+      index++;
+      length--;
     }
+  }
+
+  private void printAllPyramids(){
+    printAllPyramids(0, pyramidArray.length);
   }
 
   private Boolean executeCommand(Scanner scan, Character command) {
@@ -164,6 +171,12 @@ public class EgyptianPyramidsAppExample {
         break;
       case '3':
         printAllPyramids();
+        break;
+      case '4':
+        getPyramid(scan);
+        break;
+      case '5':
+        printList();
         break;
       case 'q':
         System.out.println("Thank you for using Nassef's Egyptian Pyramid App!");
@@ -205,13 +218,24 @@ public class EgyptianPyramidsAppExample {
   private void getPharaoh(Scanner scan){
       System.out.println("Please input pharaoh ID");
       String pharaohID = scan.nextLine();
-      if(!checkInt(pharaohID) || (Integer.parseInt(pharaohID) < 0 || Integer.parseInt(pharaohID)> pharaohArray.length)){
+      if(!checkInt(pharaohID) || (Integer.parseInt(pharaohID) < 0 || Integer.parseInt(pharaohID)>= pharaohArray.length)){
         System.out.println("Please input valid pharaoh ID");
         return;
       }
       pharaohArray[Integer.parseInt(pharaohID)].print();
     }
-  
+
+  private void getPyramid(Scanner scan){
+    System.out.println("Please input pyramid ID");
+    String pyramidID = scan.nextLine();
+    if(!checkInt(pyramidID) || (Integer.parseInt(pyramidID) < 0 || Integer.parseInt(pyramidID)>= pyramidArray.length)){
+      System.out.println("Please input valid pyramid ID");
+      return;
+    }
+    printAllPyramids(Integer.parseInt(pyramidID), 1);
+    listOfPyramids.add(Integer.parseInt(pyramidID));
+  }
+
   private boolean checkInt(String input){
        try{ 
             Integer.parseInt(input); 
@@ -220,8 +244,16 @@ public class EgyptianPyramidsAppExample {
        }catch(NullPointerException e){
       return false;
   }
-
   return true;
+  }
+  
+  private void printList(){
+    System.out.println("List of Request Pyramids");
+    System.out.printf("\t ID \tName\n");
+    System.out.printf("\t --- \t------------\n");
+    for (Integer id : listOfPyramids) {
+      System.out.printf("\t %S \t %s\n", id, pyramidArray[id].name); 
+    }
   }
 
   }
